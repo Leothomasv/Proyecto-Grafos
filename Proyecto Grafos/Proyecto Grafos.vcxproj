@@ -154,7 +154,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="E.cpp" />
+    <ClCompile Include="Grafo.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Seq.cpp" />
+    <ClCompile Include="Set.cpp" />
+    <ClCompile Include="V.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E.h" />
+    <ClInclude Include="Grafo.h" />
+    <ClInclude Include="Seq.h" />
+    <ClInclude Include="Set.h" />
+    <ClInclude Include="V.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
