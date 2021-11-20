@@ -6,7 +6,7 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(200, 200), "Funca");
     sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    shape.setFillColor(sf::Color::Cyan);
 
     while (window.isOpen())
     {
