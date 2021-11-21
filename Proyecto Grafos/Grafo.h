@@ -9,7 +9,10 @@ public:
     Grafo();
     Grafo(Set);
     Set set;
- 
+    
+    void setSet(Set);
+    Set getSet();
+
     void printGrafo();
     void etiquetarGrafo();
 };

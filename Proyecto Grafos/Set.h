@@ -6,15 +6,16 @@
 
 class Set{
 private:
-	Seq V, E;
+	SeqV V; 
+	SeqE E;
 
 public:
 	Set();
 
-	void setSeq_V(Seq);
-	void setSeq_E(Seq);
-	Seq getSeq_V();
-	Seq getSeq_E();
+	void setSeq_V(SeqV);
+	void setSeq_E(SeqE);
+	SeqV getSeq_V();
+	SeqE getSeq_E();
 
 };
 

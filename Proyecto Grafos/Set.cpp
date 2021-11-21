@@ -5,20 +5,20 @@ Set::Set(){
 
 }
 
-void Set::setSeq_V(Seq _V){
+void Set::setSeq_V(SeqV _V){
 	V = _V;
 }
 
-void Set::setSeq_E(Seq _E){
+void Set::setSeq_E(SeqE _E){
 	E = _E;
 }
 
-Seq Set::getSeq_V(){
+SeqV Set::getSeq_V(){
 
 	return V;
 }
 
-Seq Set::getSeq_E(){
+SeqE Set::getSeq_E(){
 
 	return E;
 }
