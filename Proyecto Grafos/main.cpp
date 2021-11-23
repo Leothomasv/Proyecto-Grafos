@@ -13,14 +13,23 @@ int main()
     V vertex3(3);
     V vertex4(4);
     V vertex5(5);
-    E e(1,2,3);
+    V vertex6(6);
+    V vertex7(7);
+    V vertex8(8);
+    V vertex9(9);
+    V vertex10(10);
+    E e(1, 2, 3);
     E e4(1, 4, 5);
     E e2(2, 3, 4);
     E e3(4, 2, 5);
     E e5(5, 3, 5);
     E e6(4, 5, 5);
-    vector<V> vertices = { vertex1, vertex2, vertex3, vertex4, vertex5 };
-    vector<E> aristas = { e, e2, e3, e4, e5, e6};
+    E e7(8, 9, 5);
+    E e8(7, 4, 5);
+    E e9(10, 1, 5);
+    E e10(2, 8, 5);
+    vector<V> vertices = { vertex1, vertex2, vertex3, vertex4, vertex5,vertex6,vertex7,vertex8,vertex9,vertex10 };
+    vector<E> aristas = { e, e2, e3, e4, e5, e6, e7, e8, e9 ,  e10 };
     SeqV seqV(vertices);
     SeqE seqE(aristas);
     Set set;
@@ -29,7 +38,7 @@ int main()
     grafo.setSet(set);
     
 
-    sf::RenderWindow window(sf::VideoMode(1080, 640), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!");
 
     float pos_x = 10;
     float pos_y = 20;
@@ -37,8 +46,8 @@ int main()
     vector<Vertice> allVertices;
     RectangleShape rectangle;
 
-    rectangle.setPosition(780, 0);
-    rectangle.setSize(sf::Vector2f(300, 640));
+    rectangle.setPosition(1620, 0);
+    rectangle.setSize(sf::Vector2f(300, 1080));
     rectangle.setFillColor(sf::Color(8, 41, 55));
 
     for(auto it : grafo.getSet().getSeq_V().value_v)
@@ -52,13 +61,14 @@ int main()
     vector<Text> textArray;
     
     int zigzag = 0;
+    int add = 0;
     for (auto &it : allVertices) {
         Text auxText;
         it.setFillColor(sf::Color(8, 41, 55));
-        it.setPosition(pos_x, pos_y+zigzag);
+        it.setPosition(pos_x + add, pos_y+zigzag);
 
         auxText.setFont(font);
-        auxText.setPosition(pos_x+ 42, pos_y +35 + zigzag);
+        auxText.setPosition(pos_x+ 42 + add, pos_y +35 + zigzag);
         auxText.setCharacterSize(20);
         auxText.setString(to_string(it.vertice));
         textArray.push_back(auxText);
@@ -67,9 +77,9 @@ int main()
 
         pos_x += 200;
         if (zigzag == 0) {
-            zigzag = 70;
+            zigzag = 280;
         }
-        else if (zigzag == 70) {
+        else if (zigzag == 280) {
             zigzag = 0;
         }
 
@@ -91,7 +101,7 @@ int main()
     Text auxDegree;
     auxDegree.setCharacterSize(20);
     auxDegree.setFont(font);
-    auxDegree.setPosition(800, degreePositionY + 35);
+    auxDegree.setPosition(1650, degreePositionY + 35);
     auxDegree.setString("VERTICE          GRADO");
     degreeArray.push_back(auxDegree);
     degreePositionY += 35;
@@ -99,7 +109,7 @@ int main()
         Text auxDegree;
         auxDegree.setCharacterSize(20);
         auxDegree.setFont(font);
-        auxDegree.setPosition(800, degreePositionY + 35); 
+        auxDegree.setPosition(1650, degreePositionY + 35); 
         auxDegree.setString("       "+to_string(it.v) + "            ->         " + to_string(grafo.degree(it.v)));
         degreeArray.push_back(auxDegree);
         degreePositionY += 35;
