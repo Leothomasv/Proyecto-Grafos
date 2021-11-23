@@ -1,14 +1,9 @@
 
-#include "SFML/Graphics.hpp";
+#include "Circle.h"
 #include "Grafo.h"
 
-class Vertice : public sf::CircleShape {
-    public:
-        Vertice(float radio) {
-            setRadius(radio);
-        };
-        int vertice = 0;
-};
+using namespace sf;
+#define MAX_ELEMENTS 100
 
 int main()
 {
@@ -17,11 +12,15 @@ int main()
     V vertex2(2);
     V vertex3(3);
     V vertex4(4);
+    V vertex5(5);
     E e(1,2,3);
+    E e4(1, 4, 5);
     E e2(2, 3, 4);
     E e3(4, 2, 5);
-    vector<V> vertices = { vertex1, vertex2, vertex3, vertex4 };
-    vector<E> aristas = { e, e2, e3 };
+    E e5(5, 3, 5);
+    E e6(4, 5, 5);
+    vector<V> vertices = { vertex1, vertex2, vertex3, vertex4, vertex5 };
+    vector<E> aristas = { e, e2, e3, e4, e5, e6};
     SeqV seqV(vertices);
     SeqE seqE(aristas);
     Set set;
@@ -29,41 +28,83 @@ int main()
     set.setSeq_E(seqE);
     grafo.setSet(set);
     
-    sf::RenderWindow window(sf::VideoMode(1080, 780), "SFML works!");
-    sf::CircleShape shape1(100.f);
-    sf::CircleShape shape2(100.f);
+
+    sf::RenderWindow window(sf::VideoMode(1080, 640), "SFML works!");
 
     float pos_x = 10;
     float pos_y = 20;
 
     vector<Vertice> allVertices;
+    RectangleShape rectangle;
+
+    rectangle.setPosition(780, 0);
+    rectangle.setSize(sf::Vector2f(300, 640));
+    rectangle.setFillColor(sf::Color(8, 41, 55));
 
     for(auto it : grafo.getSet().getSeq_V().value_v)
     {
-        Vertice v1(100.f);
+        Vertice v1(50.f);
         v1.vertice = it.v;
         allVertices.push_back(v1);
     }
-
+    Font font;
+    font.loadFromFile("fonts/Raleway-SemiBold.ttf");
+    vector<Text> textArray;
+    
+    int zigzag = 0;
     for (auto &it : allVertices) {
-        it.setFillColor(sf::Color::Magenta);
-        it.setPosition(pos_x, pos_y);
-        pos_x += 300;
-        if (pos_x > 900)
+        Text auxText;
+        it.setFillColor(sf::Color(8, 41, 55));
+        it.setPosition(pos_x, pos_y+zigzag);
+
+        auxText.setFont(font);
+        auxText.setPosition(pos_x+ 42, pos_y +35 + zigzag);
+        auxText.setCharacterSize(20);
+        auxText.setString(to_string(it.vertice));
+        textArray.push_back(auxText);
+      
+        
+
+        pos_x += 200;
+        if (zigzag == 0) {
+            zigzag = 70;
+        }
+        else if (zigzag == 70) {
+            zigzag = 0;
+        }
+
+        if (pos_x > 800)
         {
             pos_x = 10;
-            pos_y += 250;
+            pos_y += 200;
         }
     }
-
-    shape1.setFillColor(sf::Color::Cyan);
-    shape2.setFillColor(sf::Color::Green);
+ 
   
-    //shape1.setPosition(10, 20);
-    //shape2.setPosition(800, 100);
-
-    sf::Vertex linea[100] = {};
+    sf::Vertex linea[MAX_ELEMENTS] = {};
     int positionLinea = 0;
+    
+    
+    vector<Text> degreeArray;
+
+    int degreePositionY=20;
+    Text auxDegree;
+    auxDegree.setCharacterSize(20);
+    auxDegree.setFont(font);
+    auxDegree.setPosition(800, degreePositionY + 35);
+    auxDegree.setString("VERTICE          GRADO");
+    degreeArray.push_back(auxDegree);
+    degreePositionY += 35;
+    for (auto it : grafo.set.getSeq_V().value_v) {
+        Text auxDegree;
+        auxDegree.setCharacterSize(20);
+        auxDegree.setFont(font);
+        auxDegree.setPosition(800, degreePositionY + 35); 
+        auxDegree.setString("       "+to_string(it.v) + "            ->         " + to_string(grafo.degree(it.v)));
+        degreeArray.push_back(auxDegree);
+        degreePositionY += 35;
+    }
+
 
     for (auto it : grafo.getSet().getSeq_E().value_e) {
         float ver1_x = 0;
@@ -87,48 +128,50 @@ int main()
         int conteo = 0;
         while (conteo != 2)
         {
-            linea[positionLinea] = sf::Vertex(sf::Vector2f(ver1_x + 100, ver1_y + 100));
+            linea[positionLinea] = sf::Vertex(sf::Vector2f(ver1_x + 50, ver1_y + 50));
+            linea[positionLinea].color = sf::Color::Green;
             positionLinea++;
-            linea[positionLinea] = sf::Vertex(sf::Vector2f(ver2_x + 100, ver2_y + 100));
+
+            linea[positionLinea] = sf::Vertex(sf::Vector2f(ver2_x + 50, ver2_y + 50));
+            linea[positionLinea].color = sf::Color::Green;
             positionLinea++;
             conteo++;
         }
     }
 
-    sf::Vertex line[] =
-    {
-        sf::Vertex(sf::Vector2f(shape1.getPosition().x + 100, shape1.getPosition().y + 100)),
-        sf::Vertex(sf::Vector2f(shape2.getPosition().x + 100, shape2.getPosition().y + 100)),
-        sf::Vertex(sf::Vector2f(shape1.getPosition().x + 101, shape1.getPosition().y + 101)),
-        sf::Vertex(sf::Vector2f(shape2.getPosition().x + 101, shape2.getPosition().y + 101)),
-        sf::Vertex(sf::Vector2f(shape1.getPosition().x + 99, shape1.getPosition().y + 99)),
-        sf::Vertex(sf::Vector2f(shape2.getPosition().x + 99, shape2.getPosition().y + 99))
-    };
 
-    
+
+
     while (window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
+               
+            }
+
         }
 
         window.clear();
-        
-      
-    
-        //window.draw(shape1);
-        //window.draw(shape2);
+        window.draw(rectangle);
         window.draw(linea, 100, sf::Lines);
         for (auto it : allVertices) {
             window.draw(it);
-        }
-        
-        //window.draw(line, 6, sf::Lines);
-    
 
+        }
+
+       
+        for (auto it : textArray) {
+            window.draw(it);
+        }
+
+        for (auto it : degreeArray) {
+            window.draw(it);
+        }
+
+ 
 
 
         window.display();

@@ -10,9 +10,11 @@ public:
     Grafo(Set);
     Set set;
     
+
     void setSet(Set);
     Set getSet();
 
+    int degree(int);
     void printGrafo();
     void etiquetarGrafo();
 };

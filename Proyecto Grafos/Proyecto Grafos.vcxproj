@@ -170,6 +170,7 @@ sfml-system.lib</AdditionalDependencies>
     <ClCompile Include="V.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Circle.h" />
     <ClInclude Include="E.h" />
     <ClInclude Include="Grafo.h" />
     <ClInclude Include="Seq.h" />
