@@ -1,35 +1,79 @@
 
 #include "Circle.h"
 #include "Grafo.h"
+#include <iostream>
 
 using namespace sf;
+using namespace std;
 #define MAX_ELEMENTS 100
+
+
+
 
 int main()
 {
+    int cant;
+    cout << "Ingrese cantidad de vertices para el grafo: ";
+    cin >> cant;
+
+    vector<V> vertices = {};
+    vector<E> aristas = {};
+
+    for (int i = 0; i < cant; i++)
+    {
+        V vertex(i);
+        vertices.push_back(vertex);
+    }
+
+    char comando = 'y';
+    int v1;
+    bool foundx = false;
+    bool foundy = false;
+    int v2;
+    int peso = 1;
+
+    do
+    {
+        cout << "Ingrese un vertice de E: ";
+        cin >> v1;
+        cout << "Ingrese el otro vertice de E: ";
+        cin >> v2;
+        cout << "Ingrese el peso de la arista: ";
+        cin >> peso;
+        cout << "\n Par Creado: ( " << v1 << " <-> " << v2 << " )\n" << endl;
+
+        for (auto i : vertices)
+        {
+            if (i.v == v1)
+            {
+                foundx = true;
+            }
+            if (i.v == v2)
+            {
+                foundy = true;
+            }
+
+        }
+        if (!foundx || !foundy)
+        {
+            cout << "Uno de los elementos ingresados no existe! Por favor ingresa un combinacion adecuada." << endl;
+            foundx = false;
+            foundy = false;
+        }
+        else {
+            E vec(v1, v2, peso);
+            aristas.push_back(vec);
+            cout << "Desea continuar agregando? (y/n): ";
+            cin >> comando;
+            foundx = false;
+            foundy = false;
+        }
+    } while (comando == 'y');
+
+
+
+
     Grafo grafo;
-    V vertex1(1);
-    V vertex2(2);
-    V vertex3(3);
-    V vertex4(4);
-    V vertex5(5);
-    V vertex6(6);
-    V vertex7(7);
-    V vertex8(8);
-    V vertex9(9);
-    V vertex10(10);
-    E e(1, 2, 3);
-    E e4(1, 4, 5);
-    E e2(2, 3, 4);
-    E e3(4, 2, 5);
-    E e5(5, 3, 5);
-    E e6(4, 5, 5);
-    E e7(8, 9, 5);
-    E e8(7, 4, 5);
-    E e9(10, 1, 5);
-    E e10(2, 8, 5);
-    vector<V> vertices = { vertex1, vertex2, vertex3, vertex4, vertex5,vertex6,vertex7,vertex8,vertex9,vertex10 };
-    vector<E> aristas = { e, e2, e3, e4, e5, e6, e7, e8, e9 ,  e10 };
     SeqV seqV(vertices);
     SeqE seqE(aristas);
     Set set;
@@ -38,7 +82,7 @@ int main()
     grafo.setSet(set);
     
 
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Proyecto Teoria!");
 
     float pos_x = 10;
     float pos_y = 20;
@@ -60,15 +104,15 @@ int main()
     font.loadFromFile("fonts/Raleway-SemiBold.ttf");
     vector<Text> textArray;
     
-    int zigzag = 0;
-    int add = 0;
+    int zigzag_y = 0;
+    int zigzag_x = 300;
     for (auto &it : allVertices) {
         Text auxText;
         it.setFillColor(sf::Color(8, 41, 55));
-        it.setPosition(pos_x + add, pos_y+zigzag);
+        it.setPosition(pos_x + zigzag_x, pos_y+zigzag_y);
 
         auxText.setFont(font);
-        auxText.setPosition(pos_x+ 42 + add, pos_y +35 + zigzag);
+        auxText.setPosition(pos_x+ 42 + zigzag_x, pos_y +35 + zigzag_y);
         auxText.setCharacterSize(20);
         auxText.setString(to_string(it.vertice));
         textArray.push_back(auxText);
@@ -76,28 +120,36 @@ int main()
         
 
         pos_x += 200;
-        if (zigzag == 0) {
-            zigzag = 280;
+        if (zigzag_y == 0) {
+            zigzag_y = 280;
         }
-        else if (zigzag == 280) {
-            zigzag = 0;
+        else if (zigzag_y == 280) {
+            zigzag_y = 0;
         }
-
         if (pos_x > 800)
         {
             pos_x = 10;
             pos_y += 200;
+
+            if (zigzag_x == 300) {
+                zigzag_x = 700;
+            }
+            else if (zigzag_x == 700) {
+                zigzag_x = 300;
+            }
         }
+
+
+
     }
  
   
     sf::Vertex linea[MAX_ELEMENTS] = {};
     int positionLinea = 0;
     
-    
+    //determinar los grados de cada vertices
     vector<Text> degreeArray;
-
-    int degreePositionY=20;
+    int degreePositionY=90;
     Text auxDegree;
     auxDegree.setCharacterSize(20);
     auxDegree.setFont(font);
@@ -105,6 +157,28 @@ int main()
     auxDegree.setString("VERTICE          GRADO");
     degreeArray.push_back(auxDegree);
     degreePositionY += 35;
+
+    //menor y min grado de cada vertice
+    Text MayorMin;
+    grafo.MayorMenor();
+    MayorMin.setCharacterSize(20);
+    MayorMin.setFont(font);
+    MayorMin.setPosition(1650, 20);
+    MayorMin.setString("MIN: "+ to_string(grafo.min) + "                MAX: " + to_string(grafo.max));
+
+    //tiene ciclos
+    Text Ciclos;
+    grafo.addEdge();
+    string tieneciclos = grafo.TieneCiclos() ? "Si" : "No";
+    Ciclos.setCharacterSize(20);
+    Ciclos.setFont(font);
+    Ciclos.setPosition(1650, 70);
+    Ciclos.setString("Tiene ciclo(s): " + tieneciclos);
+    
+
+
+
+
     for (auto it : grafo.set.getSeq_V().value_v) {
         Text auxDegree;
         auxDegree.setCharacterSize(20);
@@ -159,9 +233,7 @@ int main()
         {
             if (event.type == sf::Event::Closed) {
                 window.close();
-               
             }
-
         }
 
         window.clear();
@@ -169,7 +241,6 @@ int main()
         window.draw(linea, 100, sf::Lines);
         for (auto it : allVertices) {
             window.draw(it);
-
         }
 
        
@@ -177,11 +248,14 @@ int main()
             window.draw(it);
         }
 
+        window.draw(MayorMin);
+        
+        window.draw(Ciclos);
+
         for (auto it : degreeArray) {
             window.draw(it);
         }
 
- 
 
 
         window.display();
