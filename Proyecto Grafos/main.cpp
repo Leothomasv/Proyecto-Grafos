@@ -46,11 +46,11 @@ void encontrarCamino(int partida,int destino) {
             while (conteo != 2)
             {
                 linea[positionLinea] = sf::Vertex(sf::Vector2f(ver1_x + 50, ver1_y + 50));
-                linea[positionLinea].color = sf::Color::Red;
+                linea[positionLinea].color = sf::Color::Green;
                 positionLinea++;
 
                 linea[positionLinea] = sf::Vertex(sf::Vector2f(ver2_x + 50, ver2_y + 50));
-                linea[positionLinea].color = sf::Color::Red;
+                linea[positionLinea].color = sf::Color::Green;
                 positionLinea++;
                 conteo++;
             }
@@ -87,11 +87,11 @@ void pintarAristas() {
         while (conteo != 2)
         {
             linea[positionLinea] = sf::Vertex(sf::Vector2f(ver1_x + 50, ver1_y + 50));
-            linea[positionLinea].color = sf::Color::Green;
+            linea[positionLinea].color = sf::Color::Red;
             positionLinea++;
 
             linea[positionLinea] = sf::Vertex(sf::Vector2f(ver2_x + 50, ver2_y + 50));
-            linea[positionLinea].color = sf::Color::Green;
+            linea[positionLinea].color = sf::Color::Red;
             positionLinea++;
             conteo++;
         }
