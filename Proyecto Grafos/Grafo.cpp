@@ -1,5 +1,5 @@
 #include "Grafo.h"
-
+#include <queue>
 Grafo::Grafo(){
 
 }
@@ -60,6 +60,8 @@ void Grafo::MayorMenor()
 	}
 }
 
+
+
 bool Grafo::TieneCiclosUtil(int v, bool visitado[], int padre) {
 	
 	visitado[v] = true;
@@ -96,11 +98,42 @@ bool Grafo::TieneCiclos()
 	return false;
 }
 
-void Grafo::printGrafo()
+bool Grafo::EncontrarCamino(int s , int d)
 {
-		
-}
+	camino.clear();
+	if (s == d)
+		return true;
+	
+	int n = set.getSeq_V().value_v.size();
 
-void Grafo::etiquetarGrafo()
-{
+	vector<bool> visitado(n, false);
+
+	queue<int> q;
+
+	visitado[s] = true;
+	q.push(s);
+	camino.push_back(s);
+
+	while (!q.empty())
+	{
+		s = q.front();
+		q.pop();
+  
+		for (auto x : adj[s])
+		{
+			if (x == d) {
+				camino.push_back(x);
+				return true;
+			}
+				
+    
+			if (!visitado[x])
+			{
+				visitado[x] = true;
+				q.push(x);
+				camino.push_back(x);
+			}
+		}
+	}
+	return false;
 }

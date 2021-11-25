@@ -8,7 +8,95 @@ using namespace std;
 #define MAX_ELEMENTS 100
 
 
+Grafo grafo;
+Vertex linea[MAX_ELEMENTS] = {};
+vector<Vertice> allVertices;
+int positionLinea = 0;
 
+void encontrarCamino(int partida,int destino) {
+    //buscar camino
+ 
+    if (grafo.EncontrarCamino(partida , destino)) {
+
+        for (int i = 0; i < grafo.camino.size() - 1; i++) {
+            float ver1_x = 0;
+            float ver1_y = 0;
+            float ver2_x = 0;
+            float ver2_y = 0;
+            for (auto& itV : allVertices) {
+                auto l_front = grafo.camino.begin();
+                advance(l_front, i);
+                if (*l_front == itV.vertice)
+                {
+                    ver1_x = itV.getPosition().x;
+                    ver1_y = itV.getPosition().y;
+                }
+            }
+
+            for (auto& itV : allVertices) {
+                auto l_front = grafo.camino.begin();
+                advance(l_front, i + 1);
+                if (*l_front == itV.vertice)
+                {
+                    ver2_x = itV.getPosition().x;
+                    ver2_y = itV.getPosition().y;
+                }
+            }
+            int conteo = 0;
+            while (conteo != 2)
+            {
+                linea[positionLinea] = sf::Vertex(sf::Vector2f(ver1_x + 50, ver1_y + 50));
+                linea[positionLinea].color = sf::Color::Red;
+                positionLinea++;
+
+                linea[positionLinea] = sf::Vertex(sf::Vector2f(ver2_x + 50, ver2_y + 50));
+                linea[positionLinea].color = sf::Color::Red;
+                positionLinea++;
+                conteo++;
+            }
+        }
+
+        cout << "\n Camino encontrado.\n";
+    }
+    else {
+        cout << "\n No se ha encontrado un camino. \n";
+    }
+}
+
+void pintarAristas() {
+    for (auto it : grafo.getSet().getSeq_E().value_e) {
+        float ver1_x = 0;
+        float ver1_y = 0;
+        float ver2_x = 0;
+        float ver2_y = 0;
+        for (auto& itV : allVertices) {
+            if (it.v1 == itV.vertice)
+            {
+                ver1_x = itV.getPosition().x;
+                ver1_y = itV.getPosition().y;
+            }
+        }
+        for (auto& itV : allVertices) {
+            if (it.v2 == itV.vertice)
+            {
+                ver2_x = itV.getPosition().x;
+                ver2_y = itV.getPosition().y;
+            }
+        }
+        int conteo = 0;
+        while (conteo != 2)
+        {
+            linea[positionLinea] = sf::Vertex(sf::Vector2f(ver1_x + 50, ver1_y + 50));
+            linea[positionLinea].color = sf::Color::Green;
+            positionLinea++;
+
+            linea[positionLinea] = sf::Vertex(sf::Vector2f(ver2_x + 50, ver2_y + 50));
+            linea[positionLinea].color = sf::Color::Green;
+            positionLinea++;
+            conteo++;
+        }
+    }
+}
 
 int main()
 {
@@ -71,9 +159,7 @@ int main()
     } while (comando == 'y');
 
 
-
-
-    Grafo grafo;
+    
     SeqV seqV(vertices);
     SeqE seqE(aristas);
     Set set;
@@ -87,7 +173,7 @@ int main()
     float pos_x = 10;
     float pos_y = 20;
 
-    vector<Vertice> allVertices;
+
     RectangleShape rectangle;
 
     rectangle.setPosition(1620, 0);
@@ -116,8 +202,6 @@ int main()
         auxText.setCharacterSize(20);
         auxText.setString(to_string(it.vertice));
         textArray.push_back(auxText);
-      
-        
 
         pos_x += 200;
         if (zigzag_y == 0) {
@@ -139,13 +223,7 @@ int main()
             }
         }
 
-
-
     }
- 
-  
-    sf::Vertex linea[MAX_ELEMENTS] = {};
-    int positionLinea = 0;
     
     //determinar los grados de cada vertices
     vector<Text> degreeArray;
@@ -175,9 +253,12 @@ int main()
     Ciclos.setPosition(1650, 70);
     Ciclos.setString("Tiene ciclo(s): " + tieneciclos);
     
-
-
-
+    //mensaje encontrar camino
+    Text instruccion;
+    instruccion.setCharacterSize(20);
+    instruccion.setFont(font);
+    instruccion.setPosition(1100,20);
+    instruccion.setString("Presionar la tecla C para buscar un camino.");
 
     for (auto it : grafo.set.getSeq_V().value_v) {
         Text auxDegree;
@@ -189,42 +270,12 @@ int main()
         degreePositionY += 35;
     }
 
+   
+    pintarAristas();
 
-    for (auto it : grafo.getSet().getSeq_E().value_e) {
-        float ver1_x = 0;
-        float ver1_y = 0;
-        float ver2_x = 0;
-        float ver2_y = 0;
-        for (auto& itV : allVertices) {
-            if (it.v1 == itV.vertice)
-            {
-                ver1_x = itV.getPosition().x;
-                ver1_y = itV.getPosition().y;
-            }
-        }
-        for (auto& itV : allVertices) {
-            if (it.v2 == itV.vertice)
-            {
-                ver2_x = itV.getPosition().x;
-                ver2_y = itV.getPosition().y;
-            }
-        }
-        int conteo = 0;
-        while (conteo != 2)
-        {
-            linea[positionLinea] = sf::Vertex(sf::Vector2f(ver1_x + 50, ver1_y + 50));
-            linea[positionLinea].color = sf::Color::Green;
-            positionLinea++;
+   
 
-            linea[positionLinea] = sf::Vertex(sf::Vector2f(ver2_x + 50, ver2_y + 50));
-            linea[positionLinea].color = sf::Color::Green;
-            positionLinea++;
-            conteo++;
-        }
-    }
-
-
-
+    
 
     while (window.isOpen())
     {
@@ -233,6 +284,17 @@ int main()
         {
             if (event.type == sf::Event::Closed) {
                 window.close();
+            }
+            if (event.type == sf::Event::KeyPressed) {
+                if (Keyboard::isKeyPressed(Keyboard::C)) {
+                    int partida, destino;
+                    cout << "Ingrese punto de partida: ";
+                    cin >> partida;
+                    cout << "Ingrese destino: ";
+                    cin >> destino;
+                    pintarAristas();
+                    encontrarCamino(partida,destino);
+                }
             }
         }
 
@@ -252,6 +314,7 @@ int main()
         
         window.draw(Ciclos);
 
+        window.draw(instruccion);
         for (auto it : degreeArray) {
             window.draw(it);
         }

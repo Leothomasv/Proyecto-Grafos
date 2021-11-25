@@ -15,6 +15,7 @@ public:
     int max=-1;
     
     list<int>* adj;
+    list<int> camino;
 
     void addEdge();
 
@@ -24,10 +25,9 @@ public:
 
     int degree(int);
     void MayorMenor();
+    bool EncontrarCamino(int, int);
     bool TieneCiclosUtil(int v,bool visitado[], int padre);
     bool TieneCiclos();
-    void printGrafo();
-    void etiquetarGrafo();
 };
 #endif // !GAFO_H
 
