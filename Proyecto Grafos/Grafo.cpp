@@ -138,36 +138,31 @@ bool Grafo::EncontrarCamino(int s , int d)
 	return false;
 }
 
-bool Grafo::encontrarCaminoBIEN(int src, int dest, vector<bool> &discovered, vector<int>& path)
+bool Grafo::encontrarCaminoBIEN(int origen, int destino, vector<bool> &visitado, vector<int>& camino)
 {
-	// mark the current node as discovered
-	discovered[src] = true;
+	visitado[origen] = true;
 
-	// include the current node in the path
-	path.push_back(src);
+	
+	camino.push_back(origen);
 
-	// if destination vertex is found
-	if (src == dest) {
+	
+	if (origen == destino) {
 		return true;
 	}
 
-	// do for every edge (src, i)
-	for (int i : adj[src])
+	for (int i : adj[origen])
 	{
-		// if `u` is not yet discovered
-		if (!discovered[i])
+		
+		if (!visitado[i])
 		{
-			// return true if the destination is found
-			if (encontrarCaminoBIEN(i, dest, discovered, path)) {
+			if (encontrarCaminoBIEN(i, destino, visitado, camino)) {
 				return true;
 			}
 		}
 	}
 
-	// backtrack: remove the current node from the path
-	path.pop_back();
+	camino.pop_back();
 
-	// return false if destination vertex is not reachable from src
 	return false;
 }
 

@@ -13,16 +13,16 @@ Vertex linea[MAX_ELEMENTS] = {};
 vector<Vertice> allVertices;
 int positionLinea = 0;
 
-void pintarCamino(vector<int> path) {
+void pintarCamino(vector<int> camino) {
     //buscar camino
 
-        for (int i = 0; i < path.size()-1; i++) {
+        for (int i = 0; i < camino.size()-1; i++) {
             float ver1_x = 0;
             float ver1_y = 0;
             float ver2_x = 0;
             float ver2_y = 0;
             for (auto& itV : allVertices) {
-                if (path.at(i) == itV.vertice)
+                if (camino.at(i) == itV.vertice)
                 {
                     ver1_x = itV.getPosition().x;
                     ver1_y = itV.getPosition().y;
@@ -30,7 +30,7 @@ void pintarCamino(vector<int> path) {
             }
 
             for (auto& itV : allVertices) {
-                if (path.at((i+1)) == itV.vertice)
+                if (camino.at((i+1)) == itV.vertice)
                 {
                     ver2_x = itV.getPosition().x;
                     ver2_y = itV.getPosition().y;
@@ -285,11 +285,11 @@ int main()
                     cin >> destino;
                     pintarAristas();
                   
-                    vector<bool> discovered(grafo.set.getSeq_V().value_v.size());
-                    vector<int> path;
-                    bool caminoEnconrtrado = grafo.encontrarCaminoBIEN(partida, destino, discovered, path);
+                    vector<bool> visitado(grafo.set.getSeq_V().value_v.size());
+                    vector<int> camino;
+                    bool caminoEnconrtrado = grafo.encontrarCaminoBIEN(partida, destino, visitado, camino);
                     if (caminoEnconrtrado) {
-                        pintarCamino(path);
+                        pintarCamino(camino);
                     }
                     else {
                         cout << "\n No se ha encontrado un camino. \n";
