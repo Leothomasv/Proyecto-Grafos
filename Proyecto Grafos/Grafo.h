@@ -26,7 +26,7 @@ public:
     int degree(int);
     void MayorMenor();
     bool EncontrarCamino(int, int);
-    bool encontrarCaminoBIEN(int,int);
+    bool encontrarCaminoBIEN(int , int, vector<bool>&, vector<int>&);
     bool TieneCiclosUtil(int v,bool visitado[], int padre);
     bool TieneCiclos();
 };

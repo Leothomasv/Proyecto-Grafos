@@ -13,20 +13,16 @@ Vertex linea[MAX_ELEMENTS] = {};
 vector<Vertice> allVertices;
 int positionLinea = 0;
 
-void encontrarCamino(int partida,int destino) {
+void pintarCamino(vector<int> path) {
     //buscar camino
- 
-    if (grafo.EncontrarCamino(partida , destino)) {
 
-        for (int i = 0; i < grafo.camino.size() - 1; i++) {
+        for (int i = 0; i < path.size()-1; i++) {
             float ver1_x = 0;
             float ver1_y = 0;
             float ver2_x = 0;
             float ver2_y = 0;
             for (auto& itV : allVertices) {
-                auto l_front = grafo.camino.begin();
-                advance(l_front, i);
-                if (*l_front == itV.vertice)
+                if (path.at(i) == itV.vertice)
                 {
                     ver1_x = itV.getPosition().x;
                     ver1_y = itV.getPosition().y;
@@ -34,9 +30,7 @@ void encontrarCamino(int partida,int destino) {
             }
 
             for (auto& itV : allVertices) {
-                auto l_front = grafo.camino.begin();
-                advance(l_front, i + 1);
-                if (*l_front == itV.vertice)
+                if (path.at((i+1)) == itV.vertice)
                 {
                     ver2_x = itV.getPosition().x;
                     ver2_y = itV.getPosition().y;
@@ -57,10 +51,7 @@ void encontrarCamino(int partida,int destino) {
         }
 
         cout << "\n Camino encontrado.\n";
-    }
-    else {
-        cout << "\n No se ha encontrado un camino. \n";
-    }
+  
 }
 
 void pintarAristas() {
@@ -293,7 +284,17 @@ int main()
                     cout << "Ingrese destino: ";
                     cin >> destino;
                     pintarAristas();
-                    encontrarCamino(partida,destino);
+                  
+                    vector<bool> discovered(grafo.set.getSeq_V().value_v.size());
+                    vector<int> path;
+                    bool caminoEnconrtrado = grafo.encontrarCaminoBIEN(partida, destino, discovered, path);
+                    if (caminoEnconrtrado) {
+                        pintarCamino(path);
+                    }
+                    else {
+                        cout << "\n No se ha encontrado un camino. \n";
+                    }
+
                 }
             }
         }
